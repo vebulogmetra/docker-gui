@@ -42,6 +42,14 @@ cd docker-gui
 4. Установите зависимости проекта с помощью `uv`:
 
 ```
+uv venv .venv
+```
+
+```
+source .venv/bin/activate
+```
+
+```
 uv pip install -e .
 ```
 
