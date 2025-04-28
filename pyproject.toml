@@ -1,0 +1,22 @@
+[project]
+name = "docker-gui"
+version = "0.1.0"
+description = "GUI приложение для управления Docker (Ubuntu 24 GTK)"
+authors = [
+    {name = "Artem Golubev", email = "vebulogmetra@yandex.ru"},
+]
+dependencies = [
+    "docker>=7.0.0",
+    "pygobject>=3.44.0",
+]
+requires-python = ">=3.10"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.pyright]
+reportMissingModuleSource = false
+
+[tool.setuptools]
+py-modules = ["docker_gui", "docker_api", "check_deps"]
