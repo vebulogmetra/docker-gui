@@ -7,9 +7,26 @@ authors = [
 ]
 dependencies = [
     "docker>=7.0.0",
+    "pillow>=11.3.0",
     "pygobject>=3.44.0",
+    "pyinstaller>=6.14.2",
+    "psutil>=5.0.0",
 ]
 requires-python = ">=3.10"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-qt>=4.0.0",
+    "pytest-mock>=3.10.0",
+    "pytest-cov>=4.0.0",
+    "pytest-xdist>=3.0.0",
+    "pytest-timeout>=2.0.0",
+    "black>=23.0.0",
+    "flake8>=6.0.0",
+    "mypy>=1.0.0",
+    "PyQt6>=6.0.0",
+]
 
 [build-system]
 requires = ["setuptools>=61.0"]
@@ -20,3 +37,36 @@ reportMissingModuleSource = false
 
 [tool.setuptools]
 py-modules = ["docker_gui", "docker_api", "check_deps"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "--strict-markers",
+    "--strict-config",
+    "--cov=docker_gui",
+    "--cov=docker_api",
+    "--cov-report=term-missing",
+    "--cov-report=html",
+    "--cov-fail-under=80",
+]
+markers = [
+    "unit: Unit tests",
+    "integration: Integration tests",
+    "e2e: End-to-end tests",
+    "slow: Slow running tests",
+    "gui: GUI tests",
+    "docker: Docker integration tests",
+]
+
+[tool.black]
+line-length = 88
+target-version = ['py310']
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
