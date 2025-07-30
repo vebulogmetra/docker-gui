@@ -1,0 +1,22 @@
+[Desktop Entry]
+Name=Docker GUI
+GenericName=Docker Management Interface
+Comment=Graphical user interface for Docker container and image management
+Exec=docker-gui
+Icon=docker-gui
+Terminal=false
+Type=Application
+Categories=System;Utility;Development;
+Keywords=docker;container;gui;management;development;devops;
+StartupNotify=true
+StartupWMClass=docker-gui
+MimeType=application/x-docker-container;
+Actions=Refresh;Prune;
+
+[Desktop Action Refresh]
+Name=Refresh All
+Exec=docker-gui --refresh
+
+[Desktop Action Prune]
+Name=Clean Up Docker
+Exec=docker-gui --prune 

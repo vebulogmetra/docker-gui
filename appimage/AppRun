@@ -1,0 +1,58 @@
+#!/bin/bash
+
+# AppRun script for Docker GUI AppImage
+# This script sets up the environment and launches the application
+
+# Get the directory where this script is located
+HERE="$(dirname "$(readlink -f "${0}")")"
+
+# Set up environment variables
+export PATH="${HERE}/usr/bin:${PATH}"
+export LD_LIBRARY_PATH="${HERE}/usr/lib:${HERE}/usr/lib/x86_64-linux-gnu:${LD_LIBRARY_PATH}"
+export PYTHONPATH="${HERE}/usr/lib/python3.11/site-packages:${PYTHONPATH}"
+export GI_TYPELIB_PATH="${HERE}/usr/lib/girepository-1.0:${GI_TYPELIB_PATH}"
+export XDG_DATA_DIRS="${HERE}/usr/share:${XDG_DATA_DIRS}"
+export XDG_CONFIG_DIRS="${HERE}/etc/xdg:${XDG_CONFIG_DIRS}"
+
+# Set up GTK environment for GTK4
+export GTK_DATA_PREFIX="${HERE}/usr"
+export GTK_EXE_PREFIX="${HERE}/usr"
+export GTK_PATH="${HERE}/usr/lib/x86_64-linux-gnu/gtk-4.0"
+export GTK_THEME_PATH="${HERE}/usr/share/themes"
+
+# Set up additional GTK4 specific paths
+export GDK_PIXBUF_MODULE_FILE="${HERE}/usr/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache"
+export GDK_PIXBUF_MODULEDIR="${HERE}/usr/lib/gdk-pixbuf-2.0/2.10.0/loaders"
+
+# Set up font configuration
+export FONTCONFIG_PATH="${HERE}/etc/fonts"
+export FONTCONFIG_FILE="${HERE}/etc/fonts/fonts.conf"
+
+# Check if Docker is available
+if ! command -v docker &> /dev/null; then
+    echo "Error: Docker is not installed or not in PATH"
+    echo "Please install Docker and ensure it's running"
+    echo "Installation guide: https://docs.docker.com/get-docker/"
+    exit 1
+fi
+
+# Check if Docker daemon is running
+if ! docker info &> /dev/null; then
+    echo "Error: Docker daemon is not running"
+    echo "Please start Docker service:"
+    echo "  sudo systemctl start docker"
+    echo "  sudo systemctl enable docker"
+    exit 1
+fi
+
+# Check if user is in docker group or has sudo access
+if ! docker ps &> /dev/null; then
+    echo "Warning: You may need to add your user to the docker group:"
+    echo "  sudo usermod -aG docker \$USER"
+    echo "  newgrp docker"
+    echo "Or run with sudo (not recommended for security reasons)"
+fi
+
+# Launch the application
+cd "${HERE}/usr/bin"
+exec ./docker-gui "$@" 
